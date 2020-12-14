@@ -1,0 +1,31 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - './advent2020/**'
+      - '.github/workflows/rust.yml'
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+  working-directory:  ./advent2020
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: nightly
+          override: true
+      
+    - name: Benchmark
+      run: cargo bench |grep bench_day
+      working-directory: ${{ env.working-directory }}
